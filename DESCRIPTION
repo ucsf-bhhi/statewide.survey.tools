@@ -20,3 +20,5 @@ Imports:
 Remotes: 
     eveyp/RStata,
     bergant/airtabler
+URL: https://github.com/ucsf-bhhi/statewide.survey.tools
+BugReports: https://github.com/ucsf-bhhi/statewide.survey.tools/issues
