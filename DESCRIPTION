@@ -13,9 +13,10 @@ Imports:
     airtabler (>= 0.1.6),
     dplyr,
     lubridate,
+    magrittr,
     REDCapR,
     RStata (>= 1.2.0),
     tidyr
-Remotes:  
+Remotes: 
     eveyp/RStata,
     bergant/airtabler
