@@ -65,7 +65,7 @@ fetch_redcap_data = function(
   token = redcap_token(),
   verbose = FALSE
 ) {
-  REDCapR::redcap_read(
+  REDCapR::redcap_read_oneshot(
     ...,
     redcap_uri = redcap_uri,
     token = token,
