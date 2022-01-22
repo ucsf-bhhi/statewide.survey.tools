@@ -12,8 +12,10 @@ RoxygenNote: 7.1.2
 Imports: 
     airtabler (>= 0.1.6),
     dplyr,
+    httr,
     lubridate,
     magrittr,
+    purrr,
     REDCapR,
     RStata (>= 1.2.0),
     tidyr
