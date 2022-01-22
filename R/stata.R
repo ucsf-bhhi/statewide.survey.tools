@@ -29,6 +29,7 @@ run_stata_cleaning = function(
 #' Provides path to included Stata data cleaning code.
 #'
 #' @return Path to cleaning do file.
+#' @keywords internal
 default_cleaning_do_file = function() {
   system.file("stata", "data_cleaning.do", package = "statewide.survey.tools")
 }
@@ -36,6 +37,7 @@ default_cleaning_do_file = function() {
 #' Returns path to Stata binary
 #'
 #' @return Path to Stata binary.
+#' @keywords internal
 get_stata_path = function() {
   path = getOption("RStata.StataPath")
   if (is.null(path)) {

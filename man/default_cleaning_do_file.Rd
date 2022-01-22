@@ -12,3 +12,4 @@ Path to cleaning do file.
 \description{
 Provides path to included Stata data cleaning code.
 }
+\keyword{internal}

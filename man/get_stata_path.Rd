@@ -12,3 +12,4 @@ Path to Stata binary.
 \description{
 Returns path to Stata binary
 }
+\keyword{internal}
