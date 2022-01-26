@@ -34,7 +34,7 @@ connect_to_airtable = function(
 #' @param venue_id Name of the column with the internal Airtable venue ID (different than
 #'   the venue_id we commonly use like placer_123).
 #' @param sampling_weight Name of the column with the sampling weights.
-#' @param selected_indicator Name of the column which indicates whether the
+#' @param sampled_indicator Name of the column which indicates whether the
 #'   venue was selected.
 #' @param county Character string with the county name of the sample.
 #' @param zone Character string with the zone of the sample.
@@ -65,12 +65,12 @@ prepare_sample_for_airtable = function(
   round
 ) {
   sample %>%
-    select(
+    dplyr::select(
       Venue = {{ venue_id }},
       {{ sampling_weight }},
-      sampled = {{ selected_indicator }}
+      sampled = {{ sampled_indicator }}
     ) %>%
-    mutate(
+    dplyr::mutate(
       Venue = as.list(Venue),
       sampling_weight = as.numeric(sampling_weight),
       sampled = as.integer(sampled),
