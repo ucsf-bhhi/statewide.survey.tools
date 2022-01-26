@@ -11,14 +11,19 @@ Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.1.2
 Imports: 
     airtabler (>= 0.1.6),
+    assertthat,
     dplyr,
+    glue,
     httr,
+    jsonlite,
     lubridate,
     magrittr,
     purrr,
     REDCapR,
+    rlang,
     RStata (>= 1.2.0),
-    tidyr
+    tidyr,
+    tidyselect
 Remotes: 
     eveyp/RStata,
     bergant/airtabler
