@@ -60,12 +60,12 @@
 #' }
 draw_sample = function(data, weights, n) {
   # make sure the main df doesn't already have a variable called sampled
-  if (has_name(data, "sampled"))
+  if (assertthat::has_name(data, "sampled"))
     abort("Venue data already has a variable named 'sampled'. Please rename or remove this variable.")
 
   # make sure that the main df has the weights variable
   weighting_var_name = rlang::as_string(rlang::ensym(weights))
-  if (!has_name(data, weighting_var_name)) {
+  if (!assertthat::has_name(data, weighting_var_name)) {
     abort(glue::glue("Venue data is missing the weighting variable: '{weighting_var_name}'."))
   }
 
@@ -78,19 +78,19 @@ draw_sample = function(data, weights, n) {
 
   if (n_df) {
     # make sure the strata df has a column named n
-    if (!has_name(n, "n"))
+    if (!assertthat::has_name(n, "n"))
       abort("Strata data frame is missing 'n' column.")
 
     # make sure the main df has all of the stratification variables
     strata_vars = names(n)[names(n) != "n"]
     purrr::walk(
       strata_vars,
-      ~ if ((!has_name(data, .x)))
-          abort(
-            glue::glue(
-              "Venue data is missing the stratification variable: '{.x}'."
-            )
+      ~ if ((!assertthat::has_name(data, .x)))
+        abort(
+          glue::glue(
+            "Venue data is missing the stratification variable: '{.x}'."
           )
+        )
     )
 
     results = vector("list", nrow(n))
