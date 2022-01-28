@@ -1,5 +1,10 @@
 #' Adjust PEH Counts for Sheltered/Unsheltered Share
 #'
+#' Makes the adjustment to sampling weights so that the weighted average share
+#' of residential venue (ie. emergency shelters or encampments) PEH who are
+#' sheltered matches a target (usually from PIT counts). It's designed for use
+#' within a [dplyr::mutate()] pipeline when calculating the sampling weights.
+#'
 #' @param peh_count A numeric vector of venue PEH counts.
 #' @param site_category A character vector of venue site categories.
 #' @param sheltered_share The target sheltered share as a single numeric.
@@ -8,6 +13,16 @@
 #' @export
 #'
 #' @examples
+#' \dontrun{
+#'   venue_data %>%
+#'     mutate(
+#'       sampling_weight = adjust_sheltered_unsheltered(
+#'         final_peh_estimate,
+#'         site_category,
+#'         0.45
+#'       )
+#'     )
+#' }
 adjust_sheltered_unsheltered = function(
   peh_count, site_category, sheltered_share
 ) {
