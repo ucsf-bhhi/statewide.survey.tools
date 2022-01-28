@@ -29,3 +29,6 @@ Remotes:
     bergant/airtabler
 URL: https://github.com/ucsf-bhhi/statewide.survey.tools
 BugReports: https://github.com/ucsf-bhhi/statewide.survey.tools/issues
+Suggests: 
+    testthat (>= 3.0.0)
+Config/testthat/edition: 3
