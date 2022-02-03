@@ -1,6 +1,6 @@
 Package: statewide.survey.tools
 Title: Statewide Survey Tools
-Version: 0.1.1
+Version: 0.2.0
 Authors@R: 
     person("Eve", "Perry", , "eve.perry@ucsf.edu", role = c("aut", "cre"))
 Description: Helper tools for the Statewide Survey.
@@ -11,14 +11,24 @@ Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.1.2
 Imports: 
     airtabler (>= 0.1.6),
+    assertthat,
     dplyr,
+    glue,
+    httr,
+    jsonlite,
     lubridate,
     magrittr,
+    purrr,
     REDCapR,
+    rlang,
     RStata (>= 1.2.0),
-    tidyr
+    tidyr,
+    tidyselect
 Remotes: 
     eveyp/RStata,
     bergant/airtabler
 URL: https://github.com/ucsf-bhhi/statewide.survey.tools
 BugReports: https://github.com/ucsf-bhhi/statewide.survey.tools/issues
+Suggests: 
+    testthat (>= 3.0.0)
+Config/testthat/edition: 3
