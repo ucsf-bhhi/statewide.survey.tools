@@ -82,6 +82,6 @@ adjust_count = function(sheltered_indicator, peh_count, adjuster) {
   dplyr::case_when(
     sheltered_indicator == "Sheltered" ~ peh_count * adjuster,
     sheltered_indicator == "Unsheltered" ~ peh_count * 1 / adjuster,
-    TRUE ~ peh_count
+    TRUE ~ as.numeric(peh_count)
   )
 }
