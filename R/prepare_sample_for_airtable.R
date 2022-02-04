@@ -62,19 +62,19 @@ prepare_sample_for_airtable = function(
   staffing_mapping
 ) {
   sample %>%
-    dplyr::select(
-      Venue = {{ venue_id }},
-      {{ sampling_weight }},
-      sampled = {{ sampled_indicator }}
-    ) %>%
     dplyr::mutate(
-      Venue = as.list(Venue),
+      Venue = as.list({{ venue_id }}),
       sampling_weight = as.numeric(sampling_weight),
-      sampled = as.integer(sampled),
+      sampled = as.integer({{ sampled_indicator }}),
       sample_county = county,
       sample_zone = zone,
       sample_round = as.character(round),
-      `Survey Target` = dplyr::recode(size_category, !!!survey_target_mapping),
-      Staffing = dplyr::recode(size_category, !!!staffing_mapping)
+      `Survey Target` = dplyr::recode({{ size_category }}, !!!survey_target_mapping),
+      Staffing = dplyr::recode({{ size_category }}, !!!staffing_mapping)
+    ) %>%
+    dplyr::select(
+      Venue, sampling_weight, sampled,
+      sample_county, sample_zone, sample_round,
+      `Survey Target`, Staffing
     )
 }
