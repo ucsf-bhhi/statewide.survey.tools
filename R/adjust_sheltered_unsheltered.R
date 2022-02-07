@@ -56,10 +56,34 @@ adjust_sheltered_unsheltered = function(
   purrr::map2_dbl(sheltered_indicator, peh_count, adjust_count, adjuster)
 }
 
-sheltered_or_unsheltered = function(site_category) {
+#' Create Sheltered or Unsheltered Indicator
+#'
+#' Based on the site category determine whether a venue counts as sheltered or
+#' unsheltered (or neither).
+#'
+#' @param site_category Character vector with site categories.
+#' @param sheltered_categories Character vector with the site categories that
+#'   represent sheltered venues.
+#' @param unsheltered_categories Character vector with the site categories that
+#'   represent unsheltered venues.
+#'
+#' @return A character vector with either "Sheltered", "Unsheltered, or NA.
+#' @export
+#'
+#' @examples
+#' site_category = c(
+#'   "Emergency Shelter", "Encampment",
+#'   "Non Shelter Venue", "Hotspot"
+#' )
+#' sheltered_or_unsheltered(site_category)
+sheltered_or_unsheltered = function(
+  site_category,
+  sheltered_categories = c("Emergency Shelter"),
+  unsheltered_categories = c("Encampment")
+) {
   dplyr::case_when(
-    site_category == "Emergency Shelter" ~ "Sheltered",
-    site_category == "Encampment" ~ "Unsheltered",
+    site_category %in% sheltered_categories ~ "Sheltered",
+    site_category %in% unsheltered_categories ~ "Unsheltered",
     TRUE ~ NA_character_
   )
 }
