@@ -88,6 +88,21 @@ sheltered_or_unsheltered = function(
   )
 }
 
+#' Calculate the Sheltered Share in Venue Data
+#'
+#' Calculate the share of PEH who are sheltered in the venue data. The sheltered
+#' share is: `sheltered PEH / (sheltered PEH + unsheltered PEH)`.
+#'
+#' @param sheltered_indicator A character vector/variable with the
+#'   sheltered/unsheltered indicator.
+#' @param peh_count A numeric vector/variable with the PEH estimates.
+#'
+#' @export
+#'
+#' @examples
+#' sheltered_indicator = c("Sheltered", "Unsheltered", NA)
+#' peh_count = c(5, 10, 20)
+#' observed_sheltered_share(sheltered_indicator, peh_count)
 observed_sheltered_share = function(sheltered_indicator, peh_count) {
   sheltered = sum(
     peh_count[sheltered_indicator == "Sheltered"],
