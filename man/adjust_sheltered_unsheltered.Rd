@@ -2,26 +2,72 @@
 % Please edit documentation in R/adjust_sheltered_unsheltered.R
 \name{adjust_sheltered_unsheltered}
 \alias{adjust_sheltered_unsheltered}
+\alias{sheltered_or_unsheltered}
+\alias{observed_sheltered_share}
+\alias{adjust_count}
 \title{Adjust PEH Counts for Sheltered/Unsheltered Share}
 \usage{
-adjust_sheltered_unsheltered(peh_count, site_category, sheltered_share)
+adjust_sheltered_unsheltered(sampling_weight, site_category, sheltered_share)
+
+sheltered_or_unsheltered(
+  site_category,
+  sheltered_categories = c("Emergency Shelter"),
+  unsheltered_categories = c("Encampment")
+)
+
+observed_sheltered_share(sheltered_indicator, sampling_weight)
+
+adjust_count(sheltered_indicator, sampling_weight, adjuster)
 }
 \arguments{
-\item{peh_count}{A numeric vector of venue PEH counts.}
+\item{sampling_weight}{A numeric vector/variable with the current sampling
+weights.}
 
-\item{site_category}{A character vector of venue site categories.}
+\item{site_category}{A character vector/variable of venue site categories.}
 
 \item{sheltered_share}{The target sheltered share as a single numeric.}
+
+\item{sheltered_categories}{Character vector with the site categories that
+represent sheltered venues.}
+
+\item{unsheltered_categories}{Character vector with the site categories that
+represent unsheltered venues.}
+
+\item{sheltered_indicator}{A character vector/variable with the
+sheltered/unsheltered indicator.}
+
+\item{adjuster}{A numeric value with the adjuster.}
 }
 \value{
-A vector of adjusted PEH counts.
+A vector of adjusted sampling weights.
 }
 \description{
 Makes the adjustment to sampling weights so that the weighted average share
 of residential venue (ie. emergency shelters or encampments) PEH who are
 sheltered matches a target (usually from PIT counts). It's designed for use
-within a \code{\link[dplyr:mutate]{dplyr::mutate()}} pipeline when calculating the sampling weights.
+within a \code{\link[dplyr:mutate]{dplyr::mutate()}} pipeline when calculating the sampling weights or
+the component functions (listed below) can be used to customize the
+adjustment.
 }
+\section{Functions}{
+\itemize{
+\item \code{sheltered_or_unsheltered}: Create Sheltered or Unsheltered
+Indicator
+
+Based on the site category determine whether a venue counts as sheltered or
+unsheltered (or neither). Returns a character vector with either
+"Sheltered", "Unsheltered, or NA.
+
+\item \code{observed_sheltered_share}: Calculate the Sheltered Share in
+Venue Data
+
+Calculate the share of PEH who are sheltered in the venue data. The
+sheltered share is: \verb{sheltered PEH / (sheltered PEH + unsheltered PEH)}.
+
+\item \code{adjust_count}: Make Sheltered/Unsheltered
+Adjustment
+}}
+
 \examples{
 \dontrun{
   venue_data \%>\%
@@ -31,6 +77,16 @@ within a \code{\link[dplyr:mutate]{dplyr::mutate()}} pipeline when calculating t
         site_category,
         0.45
       )
-    )
-}
+    )}
+
+site_category = c(
+  "Emergency Shelter", "Encampment",
+  "Non Shelter Venue", "Hotspot"
+)
+sheltered_indicator = sheltered_or_unsheltered(site_category)
+
+sampling_weight = c(5, 10, 20, 15)
+observed_sheltered_share(sheltered_indicator, sampling_weight)
+
+adjust_count(sheltered_indicator, sampling_weight, 0.9)
 }

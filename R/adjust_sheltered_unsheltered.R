@@ -3,13 +3,16 @@
 #' Makes the adjustment to sampling weights so that the weighted average share
 #' of residential venue (ie. emergency shelters or encampments) PEH who are
 #' sheltered matches a target (usually from PIT counts). It's designed for use
-#' within a [dplyr::mutate()] pipeline when calculating the sampling weights.
+#' within a [dplyr::mutate()] pipeline when calculating the sampling weights or
+#' the component functions (listed below) can be used to customize the
+#' adjustment.
 #'
-#' @param peh_count A numeric vector of venue PEH counts.
-#' @param site_category A character vector of venue site categories.
+#' @param sampling_weight A numeric vector/variable with the current sampling
+#'   weights.
+#' @param site_category A character vector/variable of venue site categories.
 #' @param sheltered_share The target sheltered share as a single numeric.
 #'
-#' @return A vector of adjusted PEH counts.
+#' @return A vector of adjusted sampling weights.
 #' @export
 #'
 #' @examples
@@ -21,13 +24,13 @@
 #'         site_category,
 #'         0.45
 #'       )
-#'     )
-#' }
+#'     )}
+#'
 adjust_sheltered_unsheltered = function(
-  peh_count, site_category, sheltered_share
+  sampling_weight, site_category, sheltered_share
 ) {
   # check inputs
-  assertthat::assert_that(is.numeric(peh_count))
+  assertthat::assert_that(is.numeric(sampling_weight))
   assertthat::assert_that(is.character(site_category))
   assertthat::assert_that(
     any(c("Emergency Shelter", "Encampment") %in% unique(site_category)),
@@ -46,30 +49,70 @@ adjust_sheltered_unsheltered = function(
   # calculate observed sheltered share in the venue data
   observed_sheltered_share = observed_sheltered_share(
     sheltered_indicator,
-    peh_count
+    sampling_weight
   )
 
   # calculate the adjuster
   adjuster = calculate_adjuster(sheltered_share, observed_sheltered_share)
 
   # apply the adjuster
-  purrr::map2_dbl(sheltered_indicator, peh_count, adjust_count, adjuster)
+  adjust_count(sheltered_indicator, sampling_weight, adjuster)
 }
 
-sheltered_or_unsheltered = function(site_category) {
+#' @describeIn adjust_sheltered_unsheltered Create Sheltered or Unsheltered
+#'   Indicator
+#'
+#'   Based on the site category determine whether a venue counts as sheltered or
+#'   unsheltered (or neither). Returns a character vector with either
+#'   "Sheltered", "Unsheltered, or NA.
+#'
+#' @param sheltered_categories Character vector with the site categories that
+#'   represent sheltered venues.
+#' @param unsheltered_categories Character vector with the site categories that
+#'   represent unsheltered venues.
+#'
+#' @export
+#'
+#' @examples
+#' site_category = c(
+#'   "Emergency Shelter", "Encampment",
+#'   "Non Shelter Venue", "Hotspot"
+#' )
+#' sheltered_indicator = sheltered_or_unsheltered(site_category)
+#'
+sheltered_or_unsheltered = function(
+  site_category,
+  sheltered_categories = c("Emergency Shelter"),
+  unsheltered_categories = c("Encampment")
+) {
   dplyr::case_when(
-    site_category == "Emergency Shelter" ~ "Sheltered",
-    site_category == "Encampment" ~ "Unsheltered",
+    site_category %in% sheltered_categories ~ "Sheltered",
+    site_category %in% unsheltered_categories ~ "Unsheltered",
     TRUE ~ NA_character_
   )
 }
 
-observed_sheltered_share = function(sheltered_indicator, peh_count) {
+#' @describeIn adjust_sheltered_unsheltered Calculate the Sheltered Share in
+#'   Venue Data
+#'
+#'   Calculate the share of PEH who are sheltered in the venue data. The
+#'   sheltered share is: `sheltered PEH / (sheltered PEH + unsheltered PEH)`.
+#'
+#' @param sheltered_indicator A character vector/variable with the
+#'   sheltered/unsheltered indicator.
+#'
+#' @export
+#'
+#' @examples
+#' sampling_weight = c(5, 10, 20, 15)
+#' observed_sheltered_share(sheltered_indicator, sampling_weight)
+#'
+observed_sheltered_share = function(sheltered_indicator, sampling_weight) {
   sheltered = sum(
-    peh_count[sheltered_indicator == "Sheltered"],
+    sampling_weight[sheltered_indicator == "Sheltered"],
     na.rm = TRUE
     )
-  sheltered_or_unsheltered = sum(peh_count[!is.na(sheltered_indicator)])
+  sheltered_or_unsheltered = sum(sampling_weight[!is.na(sheltered_indicator)])
 
   return(sheltered / sheltered_or_unsheltered)
 }
@@ -78,10 +121,19 @@ calculate_adjuster = function(sheltered_share, observed_sheltered_share) {
   sheltered_share / observed_sheltered_share
 }
 
-adjust_count = function(sheltered_indicator, peh_count, adjuster) {
+#' @describeIn adjust_sheltered_unsheltered Make Sheltered/Unsheltered
+#'   Adjustment
+#'
+#' @param adjuster A numeric value with the adjuster.
+#'
+#' @export
+#'
+#' @examples
+#' adjust_count(sheltered_indicator, sampling_weight, 0.9)
+adjust_count = function(sheltered_indicator, sampling_weight, adjuster) {
   dplyr::case_when(
-    sheltered_indicator == "Sheltered" ~ peh_count * adjuster,
-    sheltered_indicator == "Unsheltered" ~ peh_count * 1 / adjuster,
-    TRUE ~ as.numeric(peh_count)
+    sheltered_indicator == "Sheltered" ~ sampling_weight * adjuster,
+    sheltered_indicator == "Unsheltered" ~ sampling_weight * 1 / adjuster,
+    TRUE ~ as.numeric(sampling_weight)
   )
 }

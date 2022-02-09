@@ -37,7 +37,7 @@ test_that("adjust_count works", {
 test_that("adjust_sheltered_unsheltered input checking works", {
   expect_error(
     adjust_sheltered_unsheltered(site_category, peh_count, 0.5),
-    "peh_count is not a numeric or integer vector"
+    "sampling_weight is not a numeric or integer vector"
   )
 
   expect_error(

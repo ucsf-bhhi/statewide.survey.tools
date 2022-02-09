@@ -16,8 +16,6 @@
 #' @param county Character string with the county name of the sample.
 #' @param zone Character string with the zone of the sample.
 #' @param round Character string or number with the round of the sample.
-#' @param survey_target_mapping Named vector with the size categories as the names and their corresponding survey targets as the values.
-#' @param staffing_mapping Named vector with the size categories as the names and their corresponding staffing levels as the values.
 #'
 #' @return A data frame ready to be passed to [insert_airtable_records()].
 #' @export
@@ -32,21 +30,7 @@
 #'     size_category = size_category,
 #'     county = "Sonoma",
 #'     zone = "Santa Rosa",
-#'     round = 2,
-#'     survey_target_mapping = c(
-#'       "[5,25)" = "4-5",
-#'       "[25,50)" = "8-10",
-#'       "[50,75)" = "15",
-#'       "[75,150)" = "30",
-#'       "[150,Inf)" = "50-60"
-#'     ),
-#'     staffing_mapping = c(
-#'       "[5,25)" = "quarter of the team, half day",
-#'       "[25,50)" = "half of the team, half day",
-#'       "[50,75)" = "half of the team, full day or full team, half day",
-#'       "[75,150)" = "full team, 1 day",
-#'       "[150,Inf)" = "full team, 2 days"
-#'     )
+#'     round = 2
 #'   )
 #' }
 prepare_sample_for_airtable = function(
@@ -57,9 +41,7 @@ prepare_sample_for_airtable = function(
   size_category,
   county,
   zone,
-  round,
-  survey_target_mapping,
-  staffing_mapping
+  round
 ) {
   sample %>%
     dplyr::mutate(
@@ -68,13 +50,10 @@ prepare_sample_for_airtable = function(
       sampled = as.integer({{ sampled_indicator }}),
       sample_county = county,
       sample_zone = zone,
-      sample_round = as.character(round),
-      `Survey Target` = dplyr::recode({{ size_category }}, !!!survey_target_mapping),
-      Staffing = dplyr::recode({{ size_category }}, !!!staffing_mapping)
+      sample_round = as.character(round)
     ) %>%
     dplyr::select(
       Venue, sampling_weight, sampled,
-      sample_county, sample_zone, sample_round,
-      `Survey Target`, Staffing
+      sample_county, sample_zone, sample_round
     )
 }
