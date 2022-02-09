@@ -12,7 +12,6 @@
 #' @param sampling_weight Name of the column with the sampling weights.
 #' @param sampled_indicator Name of the column which indicates whether the
 #'   venue was selected.
-#' @param size_category Name of the column with the venue size category.
 #' @param county Character string with the county name of the sample.
 #' @param zone Character string with the zone of the sample.
 #' @param round Character string or number with the round of the sample.
@@ -27,7 +26,6 @@
 #'     venue_id = id,
 #'     sampling_weight = sampling_weight,
 #'     sampled_indicator = sampled,
-#'     size_category = size_category,
 #'     county = "Sonoma",
 #'     zone = "Santa Rosa",
 #'     round = 2
@@ -38,19 +36,18 @@ prepare_sample_for_airtable = function(
   venue_id,
   sampling_weight,
   sampled_indicator,
-  size_category,
-  county,
-  zone,
-  round
+  sample_county,
+  sample_zone,
+  sample_round
 ) {
   sample %>%
     dplyr::mutate(
       Venue = as.list({{ venue_id }}),
       sampling_weight = as.numeric(sampling_weight),
       sampled = as.integer({{ sampled_indicator }}),
-      sample_county = county,
-      sample_zone = zone,
-      sample_round = as.character(round)
+      sample_county = sample_county,
+      sample_zone = sample_zone,
+      sample_round = as.character(sample_round)
     ) %>%
     dplyr::select(
       Venue, sampling_weight, sampled,
