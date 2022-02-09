@@ -36,18 +36,18 @@ prepare_sample_for_airtable = function(
   venue_id,
   sampling_weight,
   sampled_indicator,
-  county,
-  zone,
-  round
+  sample_county,
+  sample_zone,
+  sample_round
 ) {
   sample %>%
     dplyr::mutate(
       Venue = as.list({{ venue_id }}),
       sampling_weight = as.numeric(sampling_weight),
       sampled = as.integer({{ sampled_indicator }}),
-      sample_county = county,
-      sample_zone = zone,
-      sample_round = as.character(round)
+      sample_county = sample_county,
+      sample_zone = sample_zone,
+      sample_round = as.character(sample_round)
     ) %>%
     dplyr::select(
       Venue, sampling_weight, sampled,
