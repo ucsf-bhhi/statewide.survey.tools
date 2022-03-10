@@ -18,10 +18,12 @@ Imports:
     jsonlite,
     lubridate,
     magrittr,
+    Matrix,
     purrr,
     REDCapR,
     rlang,
     RStata (>= 1.2.0),
+    survey,
     tidyr,
     tidyselect
 Remotes: 
