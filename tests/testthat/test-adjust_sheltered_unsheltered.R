@@ -15,25 +15,6 @@ test_that("sheltered_or_unsheltered works", {
   expect_equal(sheltered_or_unsheltered(NA_character_), NA_character_)
 })
 
-test_that("observed_sheltered_share works", {
-  sheltered_indicator = sheltered_or_unsheltered(site_category)
-
-  expect_equal(
-    observed_sheltered_share(sheltered_indicator, peh_count),
-    22 / (22 + 47)
-  )
-})
-
-test_that("calculate_adjuster works", {
-  expect_equal(calculate_adjuster(0.75, 0.25), 3)
-})
-
-test_that("adjust_count works", {
-  expect_equal(adjust_count("Sheltered", 10, 2), 20)
-  expect_equal(adjust_count("Unsheltered", 10, 2), 5)
-  expect_equal(adjust_count(NA_character_, 10, 2), 10)
-})
-
 test_that("adjust_sheltered_unsheltered input checking works", {
   expect_error(
     adjust_sheltered_unsheltered(site_category, peh_count, 0.5),
@@ -71,7 +52,32 @@ test_that("adjust_sheltered_unsheltered input checking works", {
 
 test_that("adjust_sheltered_unsheltered works", {
   expect_snapshot_value(
-    round(adjust_sheltered_unsheltered(peh_count, site_category, 0.5), 5),
+    round(adjust_sheltered_unsheltered(peh_count, site_category, 0.25), 5),
     style = "json2"
+  )
+})
+
+test_that("total weight doesn't change", {
+  expect_equal(
+    sum(adjust_sheltered_unsheltered(peh_count, site_category, 0.25)),
+    sum(peh_count)
+  )
+})
+
+test_that("adjusted sheltered share is correct", {
+  adjusted_sheltered_share = sum(adjust_sheltered_unsheltered(peh_count, site_category, 0.25)[site_category == "Emergency Shelter"]) / sum(adjust_sheltered_unsheltered(peh_count, site_category, 0.25)[site_category %in% c("Emergency Shelter", "Encampment")])
+
+  expect_equal(
+    adjusted_sheltered_share,
+    0.25
+  )
+})
+
+test_that("adjusted unsheltered share is correct", {
+  adjusted_unsheltered_share = sum(adjust_sheltered_unsheltered(peh_count, site_category, 0.25)[site_category == "Encampment"]) / sum(adjust_sheltered_unsheltered(peh_count, site_category, 0.25)[site_category %in% c("Emergency Shelter", "Encampment")])
+
+  expect_equal(
+    adjusted_unsheltered_share,
+    0.75
   )
 })
