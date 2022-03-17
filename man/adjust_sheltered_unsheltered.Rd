@@ -3,7 +3,7 @@
 \name{adjust_sheltered_unsheltered}
 \alias{adjust_sheltered_unsheltered}
 \alias{sheltered_or_unsheltered}
-\alias{observed_sheltered_share}
+\alias{calculate_adjusters}
 \alias{adjust_count}
 \title{Adjust PEH Counts for Sheltered/Unsheltered Share}
 \usage{
@@ -15,9 +15,9 @@ sheltered_or_unsheltered(
   unsheltered_categories = c("Encampment")
 )
 
-observed_sheltered_share(sheltered_indicator, sampling_weight)
+calculate_adjusters(sheltered_indicator, sampling_weight, sheltered_share)
 
-adjust_count(sheltered_indicator, sampling_weight, adjuster)
+adjust_count(sheltered_indicator, sampling_weight, adjusters)
 }
 \arguments{
 \item{sampling_weight}{A numeric vector/variable with the current sampling
@@ -33,10 +33,7 @@ represent sheltered venues.}
 \item{unsheltered_categories}{Character vector with the site categories that
 represent unsheltered venues.}
 
-\item{sheltered_indicator}{A character vector/variable with the
-sheltered/unsheltered indicator.}
-
-\item{adjuster}{A numeric value with the adjuster.}
+\item{adjusters}{A numeric value with the adjuster.}
 }
 \value{
 A vector of adjusted sampling weights.
@@ -58,11 +55,8 @@ Based on the site category determine whether a venue counts as sheltered or
 unsheltered (or neither). Returns a character vector with either
 "Sheltered", "Unsheltered, or NA.
 
-\item \code{observed_sheltered_share}: Calculate the Sheltered Share in
-Venue Data
-
-Calculate the share of PEH who are sheltered in the venue data. The
-sheltered share is: \verb{sheltered PEH / (sheltered PEH + unsheltered PEH)}.
+\item \code{calculate_adjusters}: Calculate the adjustment factors for
+the sheltered and unsheltered PEH estimates
 
 \item \code{adjust_count}: Make Sheltered/Unsheltered
 Adjustment
@@ -86,7 +80,15 @@ site_category = c(
 sheltered_indicator = sheltered_or_unsheltered(site_category)
 
 sampling_weight = c(5, 10, 20, 15)
-observed_sheltered_share(sheltered_indicator, sampling_weight)
+calculate_adjusters(
+  sheltered_indicator,
+  sampling_weight,
+  0.33
+)
 
-adjust_count(sheltered_indicator, sampling_weight, 0.9)
+adjust_count(
+  sheltered_indicator,
+  sampling_weight,
+  c(sheltered = 0.5, unsheltered = 1.5)
+)
 }

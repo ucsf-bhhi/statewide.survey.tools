@@ -90,20 +90,18 @@ sheltered_or_unsheltered = function(
   )
 }
 
-#' @describeIn adjust_sheltered_unsheltered Calculate the Sheltered Share in
-#'   Venue Data
-#'
-#'   Calculate the share of PEH who are sheltered in the venue data. The
-#'   sheltered share is: `sheltered PEH / (sheltered PEH + unsheltered PEH)`.
-#'
-#' @param sheltered_indicator A character vector/variable with the
-#'   sheltered/unsheltered indicator.
+#' @describeIn adjust_sheltered_unsheltered Calculate the adjustment factors for
+#'   the sheltered and unsheltered PEH estimates.
 #'
 #' @export
 #'
 #' @examples
 #' sampling_weight = c(5, 10, 20, 15)
-#' observed_sheltered_share(sheltered_indicator, sampling_weight)
+#' calculate_adjusters(
+#'   sheltered_indicator,
+#'   sampling_weight,
+#'   0.33
+#' )
 #'
 calculate_adjusters = function(
     sheltered_indicator,
@@ -134,12 +132,16 @@ calculate_adjusters = function(
 #' @describeIn adjust_sheltered_unsheltered Make Sheltered/Unsheltered
 #'   Adjustment
 #'
-#' @param adjuster A numeric value with the adjuster.
+#' @param adjusters A numeric value with the adjuster.
 #'
 #' @export
 #'
 #' @examples
-#' adjust_count(sheltered_indicator, sampling_weight, 0.9)
+#' adjust_count(
+#'   sheltered_indicator,
+#'   sampling_weight,
+#'   c(sheltered = 0.5, unsheltered = 1.5)
+#' )
 adjust_count = function(sheltered_indicator, sampling_weight, adjusters) {
   dplyr::case_when(
     sheltered_indicator == "Sheltered" ~ sampling_weight * adjusters["sheltered"],
