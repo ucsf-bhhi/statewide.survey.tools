@@ -46,17 +46,15 @@ adjust_sheltered_unsheltered = function(
   # turn site_category into a sheltered/unsheltered indicator
   sheltered_indicator = sheltered_or_unsheltered(site_category)
 
-  # calculate observed sheltered share in the venue data
-  observed_sheltered_share = observed_sheltered_share(
+  # calculate the adjuster
+  adjusters = calculate_adjusters(
     sheltered_indicator,
-    sampling_weight
+    sampling_weight,
+    sheltered_share
   )
 
-  # calculate the adjuster
-  adjuster = calculate_adjuster(sheltered_share, observed_sheltered_share)
-
   # apply the adjuster
-  adjust_count(sheltered_indicator, sampling_weight, adjuster)
+  adjust_count(sheltered_indicator, sampling_weight, adjusters)
 }
 
 #' @describeIn adjust_sheltered_unsheltered Create Sheltered or Unsheltered
@@ -107,18 +105,30 @@ sheltered_or_unsheltered = function(
 #' sampling_weight = c(5, 10, 20, 15)
 #' observed_sheltered_share(sheltered_indicator, sampling_weight)
 #'
-observed_sheltered_share = function(sheltered_indicator, sampling_weight) {
-  sheltered = sum(
-    sampling_weight[sheltered_indicator == "Sheltered"],
-    na.rm = TRUE
-    )
+calculate_adjusters = function(
+    sheltered_indicator,
+    sampling_weight,
+    sheltered_share
+) {
   sheltered_or_unsheltered = sum(sampling_weight[!is.na(sheltered_indicator)])
 
-  return(sheltered / sheltered_or_unsheltered)
-}
+  sheltered_target = sheltered_or_unsheltered * sheltered_share
+  unsheltered_target = sheltered_or_unsheltered - sheltered_target
 
-calculate_adjuster = function(sheltered_share, observed_sheltered_share) {
-  sheltered_share / observed_sheltered_share
+  sheltered_observed = sum(
+    sampling_weight[sheltered_indicator == "Sheltered"],
+    na.rm = TRUE
+  )
+
+  unsheltered_observed = sum(
+    sampling_weight[sheltered_indicator == "Unsheltered"],
+    na.rm = TRUE
+  )
+
+  c(
+    sheltered = sheltered_target / sheltered_observed,
+    unsheltered = unsheltered_target / unsheltered_observed
+  )
 }
 
 #' @describeIn adjust_sheltered_unsheltered Make Sheltered/Unsheltered
@@ -130,10 +140,10 @@ calculate_adjuster = function(sheltered_share, observed_sheltered_share) {
 #'
 #' @examples
 #' adjust_count(sheltered_indicator, sampling_weight, 0.9)
-adjust_count = function(sheltered_indicator, sampling_weight, adjuster) {
+adjust_count = function(sheltered_indicator, sampling_weight, adjusters) {
   dplyr::case_when(
-    sheltered_indicator == "Sheltered" ~ sampling_weight * adjuster,
-    sheltered_indicator == "Unsheltered" ~ sampling_weight * 1 / adjuster,
+    sheltered_indicator == "Sheltered" ~ sampling_weight * adjusters["sheltered"],
+    sheltered_indicator == "Unsheltered" ~ sampling_weight * adjusters["unsheltered"],
     TRUE ~ as.numeric(sampling_weight)
   )
 }
