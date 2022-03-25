@@ -26,11 +26,11 @@ the venue_id we commonly use like placer_123).}
 \item{sampled_indicator}{Name of the column which indicates whether the
 venue was selected.}
 
-\item{county}{Character string with the county name of the sample.}
+\item{sample_county}{Character string with the county name of the sample.}
 
-\item{zone}{Character string with the zone of the sample.}
+\item{sample_zone}{Character string with the zone of the sample.}
 
-\item{round}{Character string or number with the round of the sample.}
+\item{sample_round}{Character string or number with the round of the sample.}
 }
 \value{
 A data frame ready to be passed to \code{\link[=insert_airtable_records]{insert_airtable_records()}}.

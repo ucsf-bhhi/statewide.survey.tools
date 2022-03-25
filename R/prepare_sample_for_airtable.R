@@ -12,9 +12,9 @@
 #' @param sampling_weight Name of the column with the sampling weights.
 #' @param sampled_indicator Name of the column which indicates whether the
 #'   venue was selected.
-#' @param county Character string with the county name of the sample.
-#' @param zone Character string with the zone of the sample.
-#' @param round Character string or number with the round of the sample.
+#' @param sample_county Character string with the county name of the sample.
+#' @param sample_zone Character string with the zone of the sample.
+#' @param sample_round Character string or number with the round of the sample.
 #'
 #' @return A data frame ready to be passed to [insert_airtable_records()].
 #' @export
