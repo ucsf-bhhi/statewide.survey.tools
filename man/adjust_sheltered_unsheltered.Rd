@@ -56,7 +56,7 @@ unsheltered (or neither). Returns a character vector with either
 "Sheltered", "Unsheltered, or NA.
 
 \item \code{calculate_adjusters}: Calculate the adjustment factors for
-the sheltered and unsheltered PEH estimates
+the sheltered and unsheltered PEH estimates.
 
 \item \code{adjust_count}: Make Sheltered/Unsheltered
 Adjustment

@@ -6,6 +6,16 @@
 #' the RDS project token.
 #'
 #' @param ... Options passed to [REDCapR::redcap_read()].
+#' @param export_survey_fields A boolean that specifies whether to export the
+#'   survey identifier field (e.g., 'redcap_survey_identifier') or survey
+#'   timestamp fields (e.g., instrument+'_timestamp'). The timestamp outputs
+#'   reflect the survey's completion time (according to the time and timezone of
+#'   the REDCap server.)
+#' @param for_stata Should the data be prepared for use in Stata? This sets
+#'   col_types to be compatible with what Stata expects and makes sure variable
+#'   names are legal Stata variable names.
+#' @param col_types Override default col_types for Stata by providing a
+#'   [readr::cols()] specification.
 #' @param redcap_uri REDCap API URL. Defaults to [redcap_api_url()].
 #' @param token REDCap API Token. Defaults to main project token. Use RDS
 #'   project token with `redcap_token("rds")`.

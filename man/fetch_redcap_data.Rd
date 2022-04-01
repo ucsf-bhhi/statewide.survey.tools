@@ -6,6 +6,9 @@
 \usage{
 fetch_redcap_data(
   ...,
+  export_survey_fields = TRUE,
+  for_stata = FALSE,
+  col_types = NULL,
   redcap_uri = redcap_api_url(),
   token = redcap_token(),
   verbose = FALSE
@@ -13,6 +16,19 @@ fetch_redcap_data(
 }
 \arguments{
 \item{...}{Options passed to \code{\link[REDCapR:redcap_read]{REDCapR::redcap_read()}}.}
+
+\item{export_survey_fields}{A boolean that specifies whether to export the
+survey identifier field (e.g., 'redcap_survey_identifier') or survey
+timestamp fields (e.g., instrument+'_timestamp'). The timestamp outputs
+reflect the survey's completion time (according to the time and timezone of
+the REDCap server.)}
+
+\item{for_stata}{Should the data be prepared for use in Stata? This sets
+col_types to be compatible with what Stata expects and makes sure variable
+names are legal Stata variable names.}
+
+\item{col_types}{Override default col_types for Stata by providing a
+\code{\link[readr:cols]{readr::cols()}} specification.}
 
 \item{redcap_uri}{REDCap API URL. Defaults to \code{\link[=redcap_api_url]{redcap_api_url()}}.}
 
