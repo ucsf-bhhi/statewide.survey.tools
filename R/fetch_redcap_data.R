@@ -39,7 +39,10 @@ fetch_redcap_data = function(
     col_types = readr::cols(
       "age_self_report" = readr::col_double(),
       "date" = readr::col_character(),
-      "episode_date" = readr::col_character(),
+      "housing_time_months" = readr::col_double(),
+      "housing_time_years" = readr::col_double(),
+      "jail_days" = readr::col_double(),
+      "jail_months" = readr::col_double(),
       "stable_time_years" = readr::col_double(),
       "yrs_ago" = readr::col_character()
     )
