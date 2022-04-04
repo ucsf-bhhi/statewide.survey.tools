@@ -11,7 +11,9 @@ prepare_for_stata = function(data) {
       history_of_homelessn_v_7 = history_of_homelessness_complete,
       income_employment_an_v_8 = income_employment_and_benefits_timestamp,
       income_employment_an_v_9 = income_employment_and_benefits_complete,
-      healthcare_utilizati_v_10 = healthcare_utilization_timestamp
+      healthcare_utilizati_v_10 = healthcare_utilization_timestamp,
+      healthcare_utilizati_v_11 = healthcare_utilization_complete,
+      phys_violence_6mo_b4_v_12 = phys_violence_6mo_b4_current_v2
     ) %>%
     dplyr::rename_with(stata_safe_variable_names, everything())
 }
