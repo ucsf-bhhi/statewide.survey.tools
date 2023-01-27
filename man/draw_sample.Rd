@@ -44,7 +44,9 @@ For example:\tabular{lll}{
 }
 
 
-This can be generated with the following R code:\preformatted{tibble::tribble(
+This can be generated with the following R code:
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{tibble::tribble(
   ~dv_shelter, ~zone           , ~n,
    TRUE      , "Eastern Placer",  1,
    TRUE      , "Central Placer",  2,
@@ -53,7 +55,7 @@ This can be generated with the following R code:\preformatted{tibble::tribble(
    FALSE     , "Central Placer",  5,
    FALSE     , "South Placer"  ,  6
 )
-}
+}\if{html}{\out{</div>}}
 }
 
 \examples{
