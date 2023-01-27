@@ -7,13 +7,16 @@
 #' @param do_file Path to the cleaning do file. Defaults to included cleaning
 #'   code.
 #' @param quiet Whether to suppress printing Stata output to the screen.
+#' @param ... Other options for controlling Stata interaction. Passed to
+#'   [RStata::stata()]
 #'
 #' @return A tibble with the cleaned data.
 #' @export
 run_stata_cleaning = function(
   data,
   do_file = default_cleaning_do_file(),
-  quiet = TRUE
+  quiet = TRUE,
+  ...
 ) {
   RStata::stata(
     src = do_file,
@@ -21,7 +24,8 @@ run_stata_cleaning = function(
     data.out = TRUE,
     stata.echo = !quiet,
     stata.path = get_stata_path(),
-    stata.version = get_stata_version()
+    stata.version = get_stata_version(),
+    ...
   ) %>%
     dplyr::as_tibble()
 }

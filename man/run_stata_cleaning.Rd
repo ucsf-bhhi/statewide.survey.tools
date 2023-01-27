@@ -4,7 +4,12 @@
 \alias{run_stata_cleaning}
 \title{Runs Stata REDCap data cleaning code.}
 \usage{
-run_stata_cleaning(data, do_file = default_cleaning_do_file(), quiet = TRUE)
+run_stata_cleaning(
+  data,
+  do_file = default_cleaning_do_file(),
+  quiet = TRUE,
+  ...
+)
 }
 \arguments{
 \item{data}{Tibble or data frame to pass to Stata.}
@@ -13,6 +18,9 @@ run_stata_cleaning(data, do_file = default_cleaning_do_file(), quiet = TRUE)
 code.}
 
 \item{quiet}{Whether to suppress printing Stata output to the screen.}
+
+\item{...}{Other options for controlling Stata interaction. Passed to
+\code{\link[RStata:stata]{RStata::stata()}}}
 }
 \value{
 A tibble with the cleaned data.
