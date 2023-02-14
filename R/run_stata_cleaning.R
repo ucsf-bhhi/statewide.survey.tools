@@ -43,9 +43,10 @@ default_cleaning_do_file = function() {
 #' @return Path to Stata binary.
 #' @keywords internal
 get_stata_path = function() {
-  path = getOption("RStata.StataPath")
-  if (is.null(path)) {
-    path = "C:/Program Files/Stata17/StataMP-64.exe"
+  path = getOption("RStata.StataPath", Sys.getenv("STATA_PATH"))
+
+  if (is.null(path) | path == "") {
+    path = Sys.which("stata")
   }
 
   path
