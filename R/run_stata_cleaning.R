@@ -44,10 +44,11 @@ default_cleaning_do_file = function() {
 #' @keywords internal
 get_stata_path = function() {
   path = getOption("RStata.StataPath", Sys.getenv("STATA_PATH"))
-
-  if (is.null(path) | path == "") {
+  if (is.null(path) )
     path = Sys.which("stata")
-  }
+
+  if (is.null(path) | path == "")
+    stop("Cannot find path to Stata executible.")
 
   path
 }
@@ -56,10 +57,10 @@ get_stata_path = function() {
 #'
 #' @return Stata version as integer.
 get_stata_version = function() {
-  version = getOption("RStata.StataVersion")
+  version = getOption("RStata.StataVersion", Sys.getenv("STATA_VERSION"))
   if (is.null(version)) {
     version = 17L
   }
 
-  version
+  as.integer(version)
 }
